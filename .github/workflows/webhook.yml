@@ -2,7 +2,8 @@ name: Webhook Handler
 
 on:
   repository_dispatch:
-    types: "test-trigger
+    types:
+      - test-trigger
 
 jobs:
   handle-webhook:
@@ -10,10 +11,15 @@ jobs:
 
     steps:
       - name: Print webhook payload
+        env:
+          ARTIFACT: ${{ github.event.client_payload.artifact }}
+          ENTITY: ${{ github.event.client_payload.entity }}
+          PROJECT: ${{ github.event.client_payload.project }}
+          COLLECTION: ${{ github.event.client_payload.collection }}
+          AUTOMATION: ${{ github.event.client_payload.automation_name }}
         run: |
-          echo "Webhook received"
-          echo '${{ github.event.client_payload }}'
-
-      - name: Do something
-        run: |
-          echo "Running my webhook logic..."
+          echo "Artifact: $ARTIFACT"
+          echo "Entity: $ENTITY"
+          echo "Project: $PROJECT"
+          echo "Collection: $COLLECTION"
+          echo "Automation: $AUTOMATION"
